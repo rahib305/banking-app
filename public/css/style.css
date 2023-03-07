@@ -1,0 +1,42 @@
+
+
+body{
+    background-color: #f5f7fb;
+}
+.card  {
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+}
+.btn-primary{
+    background-color: #467fcf;
+}
+
+.navbar-first{
+    border-bottom: 1px solid rgb(246 246 246);
+    padding-top: 15px;
+}
+.navbar-second{
+    padding-bottom: 0;
+}
+
+.navbar-nav .nav-link.active {
+    color: #467fcf;
+    border-bottom: 1px solid rgb(92, 166, 239);
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+tr {
+    height: 50px;
+}
+
+.mt-60{
+    margin-top: 60px;
+}
+
+
+.container {
+    max-width: 600px;
+}
