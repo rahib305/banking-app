@@ -7,7 +7,10 @@
             <div class="card">
 
                 <div class="card-body">
-                    <div class="pb-3 bg-white">{{ __('Transfer Money') }}</div>
+                    <div class="pb-0 bg-white">
+                        <h6>{{ __('Transfer Money') }} </h6>
+                    </div>
+                    <hr>
                     @if (session()->has('success'))
                         <div class="alert alert-success">
                             {!! session()->get('success') !!}
@@ -36,7 +39,7 @@
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="amount" class="col-md-4 col-form-label text-md-start">{{ __('Amount') }}</label>
-                                <input id="amount" type="amount" class="form-control @error('amount') is-invalid @enderror" placeholder="Enter amount to deposit" name="amount" value="{{old('amount')}}" autofocus>
+                                <input id="amount" type="amount" class="form-control @error('amount') is-invalid @enderror" placeholder="Enter amount to transfer" name="amount" value="{{old('amount')}}" autofocus>
                                 @error('amount')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

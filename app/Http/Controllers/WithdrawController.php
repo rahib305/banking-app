@@ -21,19 +21,15 @@ class WithdrawController extends Controller
             'user_id'=>auth()->user()->id,
             'amount'=>$request->amount
         );
+        $user = User::find(auth()->user()->id);
+
+        if($request->amount > $user->balance) {
+            return redirect()->back()->withErrors(['msg'=>'You may not have enough balance to pay the amount.Please try with smaller amount!']);
+        }
         Withdraw::create($data);
 
-        User::where('id', auth()->user()->id)
-                    ->decrement('balance', $request->amount);
-        $user = User::find(auth()->user()->id);
-        $statement = array(
-            'user_id'=>auth()->user()->id,
-            'transaction_date'=>date('Y-m-d H:i:s'),
-            'transaction_type'=> 'Debit',
-            'amount'=> $request->amount,
-            'balance'=>$user->balance
-        );
-        Statement::create($statement);
+        $user->saveTransactionLog('Withdraw', $request->amount, null);
+
         return redirect()->back()->with('success', 'Money withdrawed successfully!');
     }
 }

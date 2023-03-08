@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 
 <div class="">
@@ -8,7 +7,10 @@
             <div class="card">
 
                 <div class="card-body">
-                    <div class="pb-3 bg-white">{{ __('Deposit Money') }}</div>
+                    <div class="pb-0 bg-white">
+                        <h6>{{ __('Deposit Money') }}</h6>
+                    </div>
+                    <hr>
                     @if (session()->has('success'))
                         <div class="alert alert-success">
                             {!! session()->get('success') !!}

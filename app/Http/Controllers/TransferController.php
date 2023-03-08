@@ -19,44 +19,31 @@ class TransferController extends Controller
         ]);
 
         $recipient = User::where('email', $request->email)->first();
+        $sender = User::find(auth()->user()->id);
         if(!$recipient) {
             return redirect()->back()->withErrors(['msg'=>'User with this email id is not exist!']);
+        } else if($request->email == $sender->email) {
+            return redirect()->back()->withErrors(['msg'=>"Something went wrong! Money can't transfer to this email."]);
         }
-        if(auth()->user()->balance < $request->amount) {
-            return redirect()->back()->withErrors(['msg'=>'You may not have enough balance to pay the amount.Please try with smaller amount!']);
+        if($sender->balance < $request->amount) {
+            return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['msg'=>'You may not have enough balance to pay the amount.Please try with smaller amount!']);
         }
         $data = array(
-            'sender_id'=>auth()->user()->id,
+            'sender_id'=>$sender->id,
             'recipient_id'=>$recipient->id,
             'amount'=>$request->amount
         );
         Transfer::create($data);
 
         //Sender
-        User::where('id', auth()->user()->id)
-                ->decrement('balance', $request->amount);
-        $user = User::find(auth()->user()->id);
-        $statement = array(
-            'user_id'=>auth()->user()->id,
-            'transaction_date'=>date('Y-m-d H:i:s'),
-            'transaction_type'=> 'Debit',
-            'amount'=> $request->amount,
-            'balance'=>$user->balance
-        );
-        Statement::create($statement);
+
+        $sender->saveTransactionLog('Transfered', $request->amount, $request->email);
 
         //Recipient
-        User::where('id', $recipient->id)
-                ->increment('balance', $request->amount);
-        $user = User::find($recipient->id);
-        $statement = array(
-            'user_id'=>$recipient->id,
-            'transaction_date'=>date('Y-m-d H:i:s'),
-            'transaction_type'=> 'Credit',
-            'amount'=> $request->amount,
-            'balance'=>$user->balance
-        );
-        Statement::create($statement);
+        // $recipient = User::where('email', $request->email)->first();
+        $recipient->saveTransactionLog('Recieved', $request->amount, $sender->email);
 
         return redirect()->back()->with('success', 'Money Transfered successfully!');
     }

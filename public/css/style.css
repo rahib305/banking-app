@@ -35,8 +35,10 @@ tr {
 .mt-60{
     margin-top: 60px;
 }
-
-
 .container {
-    max-width: 600px;
+    max-width: 680px;
+}
+
+.navbar-nav {
+    flex-direction: row;
 }

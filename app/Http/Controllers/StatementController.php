@@ -7,7 +7,9 @@ use App\Models\Statement;
 class StatementController extends Controller
 {
     public function Index() {
-        $statements = Statement::paginate('5');
+        $statements = Statement::where('user_id', auth()->user()->id)
+                        ->orderBy('id', 'desc')
+                        ->paginate('5');
         return view('statement', compact('statements'));
     }
 }

@@ -23,17 +23,9 @@ class DepositController extends Controller
         );
         Deposit::create($data);
 
-        User::where('id', auth()->user()->id)
-                    ->increment('balance', $request->amount);
         $user = User::find(auth()->user()->id);
-        $statement = array(
-            'user_id'=>auth()->user()->id,
-            'transaction_date'=>date('Y-m-d H:i:s'),
-            'transaction_type'=> 'Credit',
-            'amount'=> $request->amount,
-            'balance'=>$user->balance
-        );
-        Statement::create($statement);
+        $user->saveTransactionLog('Deposit', $request->amount, null);
+
         return redirect()->back()->with('success', 'Money deposited successfully!');
     }
 }
